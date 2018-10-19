@@ -67,7 +67,7 @@ def genBanner(imglist):
         for row in rows:
             out_dir = out_str + "(" + "x".join(row) + ")"
             size=(int(row[0]),int(row[1]))
-            print("Start to resize the image to "+"x".join(row)+"Size Banner")
+            print("Start to resize the image to "+"x".join(row)+" Size Banner")
             for img in imglist:
                 if not exists(out_dir):
                     mkdir(out_dir)
@@ -75,9 +75,14 @@ def genBanner(imglist):
             print("Successfully get the ", size, "size Banner")
 
 def resizeBanner(jpgfile, outdir,size=(128,128)):
+    #open the source image and get the size of image
     img = Image.open(jpgfile)
+    (x,y)=img.size
+
+    #resize and crop the image
     try:
-        new_img = img.resize(size, Image.BILINEAR)
+        new_img = img.resize((size[0],size[0]*y//x), Image.BILINEAR)
+        new_img = new_img.crop((0, 0, size[0], size[1]))
         new_img.save(join(outdir,basename(jpgfile)))
     except Exception as e:
         print(e)
